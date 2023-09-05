@@ -26,3 +26,7 @@ yarn-error.log*
 .vscode
 /.idea/.gitignore
 /.idea/discord.xml
+/.idea/curso-react-intro.iml
+/.idea/modules.xml
+/.idea/dictionaries/st3chnical.xml
+/.idea/vcs.xml
