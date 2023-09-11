@@ -16,20 +16,32 @@ import {CreateTodoButton} from "./CreateTodoButton";
 // localStorage.setItem('TODOS_V1', defaultTodos);
 // localStorage.removeItem('TODOS_V1');
 
+function useLocalStorage(itemName, initialValue) {
+    const localStorageItems = localStorage.getItem(itemName);
 
-function App() {
-    const localStorageTodos = localStorage.getItem('TODOS_V1')
+    let parsedItems;
 
-    let parsedTodos;
-
-    if(!localStorageTodos){
-        localStorage.setItem('TODOS_V1', JSON.stringify([]));
-        parsedTodos = [];
+    if(!localStorageItems){
+        localStorage.setItem(itemName, JSON.stringify(initialValue));
+        parsedItems = initialValue;
     }else {
-        parsedTodos = JSON.parse(localStorageTodos);
+        parsedItems = JSON.parse(localStorageItems);
     }
 
-    const [todos, setTodos] = React.useState(parsedTodos);
+    const [item, setItem] = React.useState(parsedItems);
+
+    const saveItems = (newItems) => {
+        localStorage.setItem(itemName, JSON.stringify(newItems));
+        setItem(newItems);
+    };
+
+    return [item, saveItems];
+}
+
+function App() {
+
+
+    const [todos, saveTodos] = useLocalStorage('TODOS_V1', []);
     const [searchValue, setSearchValue] = React.useState('');
 
     const completedTodos = todos.filter(todo => !!todo.completed).length;
@@ -41,11 +53,7 @@ function App() {
         }
     );
 
-    const saveTodos = (newTodos) => {
-        localStorage.setItem('TODOS_V1', JSON.stringify(newTodos));
 
-        setTodos(newTodos);
-    };
 
     const completeTodo = (text) => {
         const newTodos = [...todos];
